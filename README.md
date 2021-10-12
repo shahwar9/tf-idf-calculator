@@ -108,7 +108,9 @@ $ python integration-test.py
 ```
 
 # Architecture of the application
+Current architecture and the flow of the application is explained below:
 
+![Application flow](images/application_arch.png)
 # Improvements
 ## References:
 Thanks to following blog posts for refreshing my knowledge of Tf-Idf and creating a Flask app:
