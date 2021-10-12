@@ -97,8 +97,15 @@ This script will do the following:
 
 
 # Integration Tests
+The integration test runs on dummy small dataset and using the same API as used by the actual application.
+- `integration-test.py` file is used to run the integration test as:
+```buildoutcfg
+$ python integration-test.py
+```
 
+# Architecture of the application
 
+# Improvements
 ## References:
 Thanks to following blog posts for refreshing my knowledge of Tf-Idf and creating a Flask app:
 - [Demonstrating Calculation of TF-IDF from Sklearn](https://medium.com/analytics-vidhya/demonstrating-calculation-of-tf-idf-from-sklearn-4f9526e7e78b)
