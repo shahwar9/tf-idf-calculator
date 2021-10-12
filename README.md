@@ -66,6 +66,10 @@ The above command performs following:
 
 This step is optional because models have already been added along with this repository as `pickle` files. 
 
+### Benchmark
+The `generate_idf.py` script almost takes 4 minutes and 22 seconds to run. Here is what to expect when running this script:
+![Generate IDF](images/generate_idf.png)
+
 ## Flask app
 Once the models are ready. You can run the Flask app. 
 Please make sure `conda` environment is activated before running this command:
