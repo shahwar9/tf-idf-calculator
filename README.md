@@ -111,7 +111,82 @@ $ python integration-test.py
 Current architecture and the flow of the application is explained below:
 
 ![Application flow](images/application_arch.png)
+
+A few points to appreciate the design in the diagram above:
+
+- Grey dotted area signifies offline part of the application.
+- Blue dotted area signifies online part of the application.
+- `handlers` directory in the repository consists of Tf and Idf handlers. 
+- BeautifulSoup library was used to extract text content from the HTML response when we try to access the URL.
+- `models` are shared between `offline` and `online` parts of the application.
+- Here is small flow:
+  - Offline part uses top pipeline to calculate the cv and idf models.
+  - When application goes online, the models in previous step are used to calculate term frequencies.
+  - Results are formatted according to the requirement at the last step of online part.
+  - Formatted results are published to the browser.
+  
 # Improvements
+
+### How would you design a system that, in addition to computing TF-IDF counts for the provided URL upon request, updates the IDF statistics whenever TF-IDF for a previously unseen URL is requested?
+If the application needs to keep a record of documents seen and also update the models, we need to take care of 2 things in this case:
+
+1. Keep track of documents previously seen (unseen URLS)
+2. Update models after each URL request.
+
+#### Keep track of documents previously seen (unseen URLS)
+For this, we can simply maintain a `url cache` which would keep a track of what URLS we have seen before.
+A few keynotes to maintain the URL cache:
+- This `url cache` should be stored somewhere like an S3 object storage or Redis.
+- The reason is that if the application is restarted, previously seen URLs can be restored from the `url cache`
+
+#### Updating Models
+Since we have taken care of the URL in the previous step, we now just have to see how should we update our models.
+Now that model updates are also important. We need to store model files on an Object Storage like AWS S3 as well.
+
+For updating models, instead of just using:
+```python
+cv.transform(content_from_url)
+```
+
+We have to use:
+```python
+cv.fit_transform(content_from_url)
+```
+
+`fit_transform` also fits the existing model to the new data coming. 
+
+One decision that might need to be made is that "When" to update the model? There are 2 options:
+1. Updating model before responding to user request. 
+   - Tradeoff: User will be seeing results of an updated idf model, but it will reduce throughput and user has to wait for the model to be updated. 
+2. Updating the model after user request is served.
+   - Tradeoff: User sees results from older idf model, but the user won't have to wait for the request and models can be updated on the side by spawning a process.
+  
+Figure below summarizes the idea of updates:
+
+![Application improvements](images/changes.png)
+
+
+### How would you deploy this on AWS or GCP?
+Deploying to AWS needs following resources:
+
+- AWS EC2 Instance:
+    - EC2 instance hooked with CI/CD pipeline. 
+    - As soon as there is a commit to a `privileged branch`, CICD pipeline checks out the new code and restarts the Flask app.
+    - A `privileged branch` is either a staging or master branch.
+    - `staging` branch refers to development EC2 instance. 
+    -  `master` branch refers to production EC2 instance.
+    - Reason for having 2 environments is for testing purposes and making sure we are not right away deploying to `production`.
+  
+- AWS S3 Storage: AWS S3 storage can be used to store:
+    - URL Cache 
+    - Model files
+  
+#### Versioning
+One thing that needs to probably be implemented is to have versioning of the models. This is in case we would like to fall back 
+to some previous version of model because of processing a URL that has bad data in it. If something like this happens, versioning of models will
+help with rolling back of models.
+  
+
 ## References:
 Thanks to following blog posts for refreshing my knowledge of Tf-Idf and creating a Flask app:
 - [Demonstrating Calculation of TF-IDF from Sklearn](https://medium.com/analytics-vidhya/demonstrating-calculation-of-tf-idf-from-sklearn-4f9526e7e78b)
