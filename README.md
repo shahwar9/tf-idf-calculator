@@ -155,6 +155,13 @@ cv.fit_transform(content_from_url)
 
 `fit_transform` also fits the existing model to the new data coming. 
 
+This can easily be done by implementing a method which is part of `handlers.idf.InverseDocumentFrequencyCalculator` class:
+
+```python
+    def update_idf(self, new_dataset):
+        raise NotImplementedError("IDF Update is not implemented yet.")
+```
+
 One decision that might need to be made is that "When" to update the model? There are 2 options:
 1. Updating model before responding to user request. 
    - Tradeoff: User will be seeing results of an updated idf model, but it will reduce throughput and user has to wait for the model to be updated. 
