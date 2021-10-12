@@ -92,7 +92,8 @@ This script will do the following:
 
 - Enter following in your web browser:
 `http://127.0.0.1:5000/tfidf?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FTf-idf&limit=10`
-  To see the results of the application. 
+  To see the results of the application like following:
+  ![Example Output](images/output_example.png)
 
 
 # Integration Tests

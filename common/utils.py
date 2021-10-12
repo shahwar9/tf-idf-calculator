@@ -34,7 +34,7 @@ def get_paths(dataset_path: str) -> List[str]:
 
 def read_data(data_paths: List[str]) -> pd.DataFrame:
     logger.info(f"Reading data from csv files: {data_paths}")
-    dataframes = [pd.read_csv(data_path, usecols=["content"]) for data_path in data_paths[:1]]
+    dataframes = [pd.read_csv(data_path, usecols=["content"]) for data_path in data_paths]
 
     logger.info("Concatenating dataframes from different files...")
     docs_df = pd.concat(dataframes)

@@ -34,8 +34,7 @@ class InverseDocumentFrequencyCalculator:
         word_count_vector = cv.fit_transform(pre_processed_docs)
 
         logger.info("Count Vectorizer model created.")
-        logger.info("Top 10 vocabulary words: " 
-                    f"{list(cv.vocabulary_.keys())[:10]}")
+        logger.info("Top 10 vocabulary words: " f"{list(cv.vocabulary_.keys())[:10]}")
 
         save_model(cv, os.path.join(self.cfg.models_dir, self.cfg.cv_model_name))
 
@@ -43,8 +42,7 @@ class InverseDocumentFrequencyCalculator:
         tfidf_transformer = TfidfTransformer(smooth_idf=True, use_idf=True)
         tfidf_transformer.fit(word_count_vector)
 
-        save_model(tfidf_transformer, os.path.join(self.cfg.models_dir,
-                                                   self.cfg.idf_model_name))
+        save_model(tfidf_transformer, os.path.join(self.cfg.models_dir, self.cfg.idf_model_name))
 
     def update_idf(self, new_dataset):
         raise NotImplementedError("IDF Update is not implemented yet.")

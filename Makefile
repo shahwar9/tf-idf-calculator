@@ -8,3 +8,6 @@ black-check:
 
 flake8-check:
 	flake8 common/ handlers/
+
+integration-test:
+	python integration_test.py
