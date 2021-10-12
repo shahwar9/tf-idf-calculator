@@ -1,5 +1,8 @@
 #!/bin/bash
 
-. activate tfidf
-export FASK_APP=app
-flask run
+conda init bash
+conda activate tfidf
+export FLASK_APP=app
+export FLASK_ENV=development
+
+python app.py

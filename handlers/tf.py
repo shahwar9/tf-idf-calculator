@@ -5,15 +5,15 @@ from common.utils import pre_process
 
 
 class TermFrequencyCalculator:
-    def __init__(self, models_dir):
-
+    def __init__(self, cfg):
+        self.cfg = cfg
         try:
-            idf_path = os.path.join(models_dir, "idf.pkl")
+            idf_path = os.path.join(self.cfg.models_dir, self.cfg.idf_model_name)
         except FileNotFoundError:
             print(f"Model file not found: {idf_path}")
 
         try:
-            cv_path = os.path.join(models_dir, "cv.pkl")
+            cv_path = os.path.join(self.cfg.models_dir, self.cfg.cv_model_name)
         except FileNotFoundError:
             print(f"Model file not found: {cv_path}")
 

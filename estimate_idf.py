@@ -1,10 +1,16 @@
+import yaml
+import json
+from types import SimpleNamespace
+
 from handlers.idf import InverseDocumentFrequencyCalculator
+from common.utils import get_config
 
 
-def main(dataset_path):
-    idf = InverseDocumentFrequencyCalculator(models_dir="models")
-    idf.train_idf(dataset_path=dataset_path)
+def main(cfg):
+    idf = InverseDocumentFrequencyCalculator(cfg)
+    idf.create_idf_model()
 
 
 if __name__ == "__main__":
-    main("/Users/shahwar/repos/tf-idf-calculator/dataset")
+    app_cfg = get_config("config.yaml")
+    main(app_cfg)

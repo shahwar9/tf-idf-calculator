@@ -3,7 +3,10 @@ import os
 import pickle
 import pandas as pd
 import urllib
+import json
+import yaml
 
+from types import SimpleNamespace
 from typing import List, Any
 from glob import glob
 from loguru import logger
@@ -45,3 +48,10 @@ def pre_process(text: str) -> str:
     text = re.sub("(\\d|\\W)+", " ", text)
     text = re.sub(r"[^\x00-\x7f]", r" ", text)
     return text
+
+
+def get_config(filename):
+    config = yaml.safe_load(open(filename))
+    app_cfg = json.loads(json.dumps(config), object_hook=lambda d: SimpleNamespace(**d))
+
+    return app_cfg

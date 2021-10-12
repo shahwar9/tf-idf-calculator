@@ -1,0 +1,5 @@
+
+models_dir: models
+cv_model_name: cv.pkl
+idf_model_name: idf.pkl
+dataset_dir: dataset
